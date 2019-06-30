@@ -20,13 +20,22 @@
       var socket = io();
       $('form').submit(function(e) {
         e.preventDefault(); // prevents page reloading
-        socket.emit('chat message', $('#m').val());
+        socket.emit('vote message', {t:'V_START',qt:12});
+        socket.emit('chat message', {t:'V_START',qt:12});
         $('#m').val('');
         return false;
         });
       socket.on('chat message', function(msg){
         $('#messages').append($('<li>').text(msg));
       });
+      socket.on('ClientBroadcast',function(json) {
+          console.log(json)
+          const {t, qt} = json
+          if (t === 'V_START') {
+            $('#messages').append($('<li>').text(t));
+            $('#messages').append($('<li>').text(qt));
+          }
+      })
     });
   </script>
   <body>
